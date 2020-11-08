@@ -1,37 +1,70 @@
 #![allow(non_snake_case)]
 fn main() {
     println!("Elevator Start");
+
+    let building = Building::new(10);
+    let mut elevator = building.elevator;
+    let reqAs = vec![(Direction::Up, 1),(Direction::Up, 2),(Direction::Up, 3),(Direction::Up, 4)];
+    let reqBs = vec![(1,2), (2,4), (3,5), (4,6)]; //will do (a,b) a to b
+    
 }
- 
+
+pub enum Direction {
+    Up,
+    Down,
+}
 pub struct Building {
     floors:u8,
     elevator: Elevator,
 }
-
-/*
-Elevator Rules
-
-요청 튜플은 (방향, 요청자의 층) 버튼을 누르고, 엘레베이터를 기다려야하기 때문
-엘레베이터는 무조건 요청 순서대로 움직인다.
-엘레베이터 현 위치가 최하층일때, 요청 순으로 움직인다.
-
-요청의 층으로 도착했다면 요청자의 이동층을 얻는다.
-없다면 다음 요청자의 층으로 이동한다.
-
-현재층 ~ 이동층 사이에 같은 방향의 요청 층이 있다면 그곳에서 멈추고, 이동층을 받아들인다.
-새로 온 이동층이 처음 현재층~이동층 사이에 있다면 또한 그곳에서 내려준다.
-새로 받은 이동층이 처음 이동층보다 아래라면, 처음 이동층에 먼저 내려주고 다음에 한다.
-
-만약 다음 이동층과 그 이후의 이동층이 겹칠 수 있다. 이때는 아예 방향이 다르기에 그 사람은 타지 않는다.
-만약 방향이 같다면, 그 사람은 타고, 이동 요청을 받아들인다. 
-
-이동 데이터는 이동 층 값을 가진다.
-모든 방향은 위/아래 둘 중 하나이다.
-위/아래 버튼을 누른 사람은 오직 위/아래로만 움직여야한다.
-ex (5층,1층) 요청이 왔다면 5층으로 이동후, 절대 위로 올라가서는 안된다.
- */
-
 pub struct Elevator {
     floor:u8,
-    
+    reqA: Vec<(Direction, u8)>,
+    reqB: Vec<u8>,    
 }
+
+impl Building {
+    pub fn new(floors: u8) -> Building {
+        Building {
+            floors: floors,
+            elevator: Elevator::new()
+        }
+    }
+}
+
+impl Elevator {
+    pub fn new() -> Elevator {
+        Elevator {
+            floor: 1,
+            reqA: Vec::new(),
+            reqB: Vec::new(),
+        }
+    }
+
+    pub fn addReqA(&mut self, dir:Direction, currFloor:u8) {
+        self.reqA.push((dir, currFloor))
+    }
+    pub fn addReqB(&mut self, to:u8) {
+        self.reqB.push(to)
+    }
+    pub fn work(self) -> u8 {
+        return self.floor
+    }
+}
+
+/*
+    Elevator must move reqB after reqA
+
+    the request order : reqA -> reqB
+    reqA is statement that 'Pressed call elevator button & wait for elevator'
+    reqB is statement that 'Elevator arrived & pressed floor where do I go'
+
+    Elevator must go reqAs in order
+
+    if Elevator.floor on bottom & there're some reqAs
+    -> list same direction(up,down) 
+    -> make Up reqAs ascending, Down reqAs descending
+    -> go to the first reqA & move only one direction untill reqAs that direction are all finished
+
+    During elevator conducting reqB of reqA, if there are same direction reqA, then get those reqAs.
+*/
