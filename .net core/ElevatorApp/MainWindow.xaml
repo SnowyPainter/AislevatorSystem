@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ElevatorApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700"  Width="500" KeyUp="Window_KeyUp" SizeToContent="Width" WindowStyle="None">
+        Title="MainWindow" Height="700"  Width="500" MinWidth="500" MinHeight="700" KeyUp="Window_KeyUp" SizeToContent="WidthAndHeight" WindowStyle="None">
     <Grid>
         <Grid>
-            <Grid x:Name="ElevatorZone" HorizontalAlignment="Left" Width="200" Background="#FF3A3A3A">
+            <Grid x:Name="ElevatorZone" HorizontalAlignment="Left"  VerticalAlignment="Stretch" Width="200" Background="#FF3A3A3A">
                 <Grid x:Name="ElevatorObject" HorizontalAlignment="Stretch" Height="100" Width="Auto" Background="White" VerticalAlignment="Top">
                     <Label Content="Elevator" HorizontalAlignment="Left" Margin="5,2,0,0" VerticalAlignment="Top" Width="175" Height="26"/>
 
